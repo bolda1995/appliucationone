@@ -8,7 +8,7 @@ async def root():
     return {"message": "WhatsApp"}
 
 
-@app.post('/messages/send/')
+@app.post('/messages/send')
 async def messages(message: Message):
     return {"message": "OK"}
 
