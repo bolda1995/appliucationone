@@ -1,20 +1,20 @@
 from fastapi import FastAPI
+from Models import Message
 
 app = FastAPI()
-List_message = []
+
 @app.get("/")
 async def root():
     return {"message": "WhatsApp"}
 
 
-@app.post('/messages/send')
-async def messages(message_json):
+@app.post('/messages/send/')
+async def messages(message: Message):
     return {"message": "OK"}
 
 @app.get('/messages/receive/')
-async def messages_receive(meessage_id):
-    print(meessage_id)
-    return ""
+async def messages_receive(meessage: Message):
+    return {"detail": "ok"}
 
 @app.get('/health')
 async def check_health():
