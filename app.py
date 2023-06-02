@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 from Models import Message
 
 app = FastAPI()
@@ -9,11 +9,11 @@ async def root():
 
 
 @app.post('/messages/send')
-async def messages(message: Message):
+async def messages(dictionary: dict):
     return {"message": "OK"}
 
 @app.get('/messages/receive')
-async def messages_receive(meessage: Message):
+async def messages_receive(meessage):
     return {"detail": "ok"}
 
 @app.get('/health')

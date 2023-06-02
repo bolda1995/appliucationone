@@ -1,14 +1,19 @@
 from pydantic import BaseModel
 
+
 class Header(BaseModel):
-    processing_type: str
-    sending_process_status: bool
-    sender_system: str
+    need_rewrite: str
+    sending_process_status: str
     message_type: str
+    processing_type: str
+    receiver_system: str
     message_id: str
-    content_type: str
-    properties: str
+    sender_system: str
+
+class MessageData(BaseModel):
+    data: str
 
 class Message(BaseModel):
     header: Header
-    message: str
+    message: MessageData
+
