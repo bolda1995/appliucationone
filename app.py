@@ -9,8 +9,7 @@ async def root():
 
 @app.post('/messages/send')
 async def messages(message_json):
-    print(message_json)
-    return {"message": message_json}
+    return {"message": "OK"}
 
 @app.get('/messages/receive/')
 async def messages_receive(meessage_id):
