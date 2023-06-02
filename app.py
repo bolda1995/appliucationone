@@ -13,7 +13,7 @@ async def messages(dictionary: dict):
     return {"message": "OK"}
 
 @app.get('/messages/receive')
-async def messages_receive(meessage: str):
+async def messages_receive(meessage: dict):
     return {"detail": "ok"}
 
 @app.get('/health')
