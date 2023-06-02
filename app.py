@@ -9,11 +9,12 @@ async def root():
 
 @app.post('/messages/')
 async def messages(message_json):
-
+    print(message_json)
     return {"message": "message created successfully"}
 
 @app.get('/messages/receive/')
-async def messages_receive(meesage_id, status, date_form, date_to):
+async def messages_receive(meessage_id):
+    print(meessage_id)
     return ""
 
 @app.get('/health')
