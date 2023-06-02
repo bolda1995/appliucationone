@@ -12,7 +12,7 @@ async def root():
 async def messages(message: Message):
     return {"message": "OK"}
 
-@app.get('/messages/receive/')
+@app.get('/messages/receive')
 async def messages_receive(meessage: Message):
     return {"detail": "ok"}
 
