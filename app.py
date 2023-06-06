@@ -18,7 +18,8 @@ async def messages(dictionary: dict):
 
 @app.get('/messages/receive')
 async def messages_receive():
-    list_row = RequestTODataBase.request_select()
+    obj_row = RequestTODataBase()
+    list_row = obj_row.request_select()
     return {"detail": list_row}
 
 @app.get('/health')
