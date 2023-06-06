@@ -29,7 +29,7 @@ class RequestTODataBase:
         self.conn.close()
 
     def request_select(self):
-        sql_query = "SELECT * FROM message_data"
+        sql_query = "SELECT * FROM public.message_data"
         cursor = self.conn.cursor()
         cursor.execute(sql_query)
         rows = cursor.fetchall()
