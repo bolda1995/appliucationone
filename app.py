@@ -20,7 +20,7 @@ async def messages(dictionary: dict):
 async def messages_receive():
     obj_row = RequestTODataBase()
     list_row = obj_row.request_select()
-    return {"detail": list_row}
+    return list_row
 
 @app.get('/health')
 async def check_health():
