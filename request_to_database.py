@@ -11,7 +11,7 @@ class RequestTODataBase:
     def insert_value(self, list_val: list):
 
         sql_query = """
-            INSERT INTO public.message_data (sending_process_status,
+            INSERT INTO message_data (sending_process_status,
              need_rewrite, 
              message_type, 
              processing_type, 
@@ -29,7 +29,7 @@ class RequestTODataBase:
         self.conn.close()
 
     def request_select(self):
-        sql_query = "SELECT * FROM public.message_data"
+        sql_query = "SELECT * FROM message_data"
         cursor = self.conn.cursor()
         cursor.execute(sql_query)
         rows = cursor.fetchall()
