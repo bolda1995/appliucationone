@@ -1,12 +1,5 @@
 import psycopg2
 class RequestTODataBase:
-    conn = psycopg2.connect(
-        host="127.0.0.1",
-        port="5432",
-        database="onec_cinfo",
-        user="oleg",
-        password="Zxcv7890"
-    )
 
     def insert_value(self, list_val: list):
         conn = psycopg2.connect(
