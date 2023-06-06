@@ -11,7 +11,7 @@ class RequestTODataBase:
     def insert_value(self, list_val: list):
 
         sql_query = """
-            INSERT INTO message_data (sending_process_status,
+            INSERT INTO public.message_data (sending_process_status,
              need_rewrite, 
              message_type, 
              processing_type, 
