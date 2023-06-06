@@ -2,10 +2,10 @@ import psycopg2
 
 # Establish connection to the default PostgreSQL database
 conn = psycopg2.connect(
-    host="your_host",
-    port="your_port",
-    user="your_username",
-    password="your_password"
+    host="127.0.0.1",
+    port="5432",
+    user="oleg",
+    password="Zxcv7890"
 )
 
 # Create a cursor object
@@ -13,7 +13,7 @@ cur = conn.cursor()
 
 # Define the database name and owner
 database_name = "1СINFO"
-owner = "vdgb5"
+owner = "oleg"
 
 # Create the database with parameters
 cur.execute(f"CREATE DATABASE {database_name} OWNER {owner}")
