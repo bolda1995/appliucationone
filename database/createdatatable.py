@@ -4,7 +4,7 @@ import psycopg2
 conn = psycopg2.connect(
     host="127.0.0.1",
     port="5432",
-    database="1CINFO",
+    database="ONEC_CINFO",
     user="oleg",
     password="Zxcv7890"
 )
