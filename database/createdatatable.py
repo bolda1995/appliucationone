@@ -34,3 +34,4 @@ conn.commit()
 # Close the cursor and connection
 cur.close()
 conn.close()
+print("ok")
