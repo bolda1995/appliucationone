@@ -3,7 +3,7 @@ class RequestTODataBase:
     conn = psycopg2.connect(
         host="127.0.0.1",
         port="5432",
-        database="ONEC_CINFO",
+        database="onec_cinfo",
         user="oleg",
         password="Zxcv7890"
     )
