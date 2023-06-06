@@ -41,11 +41,24 @@ class RequestTODataBase:
         return list_rows
 
     def set_elements_for_db(self, list_val: list):
-        need_rewrite = list_val[0][1]
-        sending_process_status = list_val[1][1]
+        need_rewrite: bool = True
+
+        sending_process_status: bool = True
+
+        if list_val[0][1] != 'true':
+            need_rewrite = False
+
+        if list_val[1][1] != 'true':
+            sending_process_status = False
+
         message_type = list_val[2][1]
+
         processing_type = list_val[3][1]
+
         receiver_system = list_val[4][1]
+
         message_id = list_val[5][1]
+
         sender_system = list_val[6][1]
+
         return need_rewrite, sending_process_status, message_type, processing_type, receiver_system, message_id, sender_system
