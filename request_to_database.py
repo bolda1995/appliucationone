@@ -16,7 +16,7 @@ class RequestTODataBase:
              processing_type, 
              receiver_system, 
              message_id,
-             sender_system,
+             sender_system
              )
             VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
