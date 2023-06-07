@@ -13,7 +13,8 @@ async def root():
 async def messages(dictionary: dict):
     objdata = GetData(dictionary)
     val_for_data_base = objdata.get_data()
-    RequestTODataBase.insert_value(val_for_data_base)
+    objval = RequestTODataBase()
+    objval.insert_value(val_for_data_base)
     return {"message": "OK"}
 
 @app.get('/messages/receive')
