@@ -15,7 +15,7 @@ async def messages(dictionary: dict):
     val_for_data_base = objdata.get_data()
     objval = RequestTODataBase()
     objval.insert_value(val_for_data_base)
-    return {"message": "OK"}
+    return {"result": "success"}
 
 @app.get('/messages/receive')
 async def messages_receive():
