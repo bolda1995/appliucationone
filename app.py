@@ -21,7 +21,7 @@ async def messages(dictionary: dict):
 async def messages_receive():
     obj_row = RequestTODataBase()
     list_row = obj_row.request_select()
-    return {"Messages": list_row}
+    return {"Messages": {"Message": list_row}}
 
 @app.get('/health')
 async def check_health():
