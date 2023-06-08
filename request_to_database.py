@@ -81,7 +81,6 @@ class RequestTODataBase:
          'sender-system']
         dict_message = {"Message": ""}
         array_dict = []
-        print(list_rows)
         for row in list_rows:
             dict_out = {"header": ""}
             dict_val = {}
