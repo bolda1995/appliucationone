@@ -42,9 +42,11 @@ class RequestTODataBase:
         list_rows = []
         for row in rows:
             list_rows.append(row)
+
+        out_dict = self.set_output_elenents(list_rows)
         cursor.close()
         conn.close()
-        return list_rows
+        return out_dict
 
     def set_elements_for_db(self, list_val: list):
         need_rewrite: bool = True
@@ -68,3 +70,33 @@ class RequestTODataBase:
         sender_system = list_val[6][1]
 
         return need_rewrite, sending_process_status, message_type, processing_type, receiver_system, message_id, sender_system
+
+    def set_output_elenents(self, list_rows: list):
+        arr_row = ['need-rewrite',
+         'sending-process-status',
+         'message-type',
+         'processing-type',
+         'receiver-system',
+         'message-id',
+         'sender-system']
+        dict_message = {"Message": ""}
+        array_dict = []
+        print(list_rows)
+        for row in list_rows:
+            dict_out = {"header": ""}
+            dict_val = {}
+            dict_val[arr_row[0]] = row[0]
+            dict_val[arr_row[1]] = row[1]
+            dict_val[arr_row[2]] = row[2]
+            dict_val[arr_row[3]] = row[3]
+            dict_val[arr_row[4]] = row[4]
+            dict_val[arr_row[5]] = row[5]
+            dict_val[arr_row[6]] = row[6]
+            dict_out["header"] = dict_val
+            array_dict.append(dict_out)
+        dict_message["Message"] = array_dict
+        return dict_message
+
+
+
+

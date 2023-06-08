@@ -20,7 +20,7 @@ create_table_query = """
         message_type VARCHAR(32),
         processing_type VARCHAR(32),
         receiver_system VARCHAR(32),
-        message_id VARCHAR(32),
+        message_id VARCHAR(50),
         sender_system VARCHAR(32)
     )
 """
