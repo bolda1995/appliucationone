@@ -17,7 +17,7 @@ async def messages(dictionary_data: dict):
     return {"result": "success"}
 
 @app.get('/messages/receive')
-async def messages_receive():
+async def messages_receive(request: Request):
     obj_row = RequestTODataBase()
     list_row = obj_row.request_select()
     return {"Messages": list_row}
