@@ -28,7 +28,7 @@ class RequestTODataBase:
         cursor.close()
         conn.close()
 
-    def request_select(self):
+    def request_select(self, column):
         conn = psycopg2.connect(
             host="127.0.0.1",
             port="5432",
@@ -36,14 +36,14 @@ class RequestTODataBase:
             user="oleg",
             password="Zxcv7890"
         )
-        sql_query = "SELECT * FROM message_data"
+        sql_query = f"SELECT * FROM message_data WHERE receiver_system={column};"
         cursor = conn.cursor()
         cursor.execute(sql_query)
         rows = cursor.fetchall()
         list_rows = []
         for row in rows:
             list_rows.append(row)
-
+        print(list_rows)
         out_dict = self.set_output_elenents(list_rows)
         cursor.close()
         conn.close()
