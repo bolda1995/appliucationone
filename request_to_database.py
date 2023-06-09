@@ -72,7 +72,7 @@ class RequestTODataBase:
 
         data = list_val[7][1]
 
-        return need_rewrite, sending_process_status, message_type, processing_type, receiver_system, message_id, sender_system, bin(data)
+        return need_rewrite, sending_process_status, message_type, processing_type, receiver_system, message_id, sender_system, data
 
     def set_output_elenents(self, list_rows: list):
         arr_row = ['need-rewrite',
