@@ -36,7 +36,7 @@ class RequestTODataBase:
             user="oleg",
             password="Zxcv7890"
         )
-        sql_query = f"SELECT * FROM message_data WHERE receiver_system={str(column)};"
+        sql_query = f"SELECT * FROM message_data WHERE receiver_system='{str(column)}';"
         cursor = conn.cursor()
         cursor.execute(sql_query)
         rows = cursor.fetchall()
