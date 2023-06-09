@@ -16,9 +16,10 @@ class RequestTODataBase:
              processing_type, 
              receiver_system, 
              message_id,
-             sender_system
+             sender_system,
+             data 
              )
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
         """
         cursor = conn.cursor()
         values = self.set_elements_for_db(list_val)
@@ -69,7 +70,9 @@ class RequestTODataBase:
 
         sender_system = list_val[6][1]
 
-        return need_rewrite, sending_process_status, message_type, processing_type, receiver_system, message_id, sender_system
+        data = list_val[7][1]
+
+        return need_rewrite, sending_process_status, message_type, processing_type, receiver_system, message_id, sender_system, data
 
     def set_output_elenents(self, list_rows: list):
         arr_row = ['need-rewrite',

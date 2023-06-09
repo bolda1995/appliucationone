@@ -9,4 +9,4 @@ class GetData:
             for t in v.items():
                 data_for_database.append(t)
 
-        return data_for_database[0:-1]
+        return data_for_database
