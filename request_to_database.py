@@ -81,12 +81,15 @@ class RequestTODataBase:
          'processing-type',
          'receiver-system',
          'message-id',
-         'sender-system']
+         'sender-system',
+         'data']
         dict_message = {"Message": ""}
+        val_meesage = {"Message":""}
         array_dict = []
         for row in list_rows:
             dict_out = {"header": ""}
             dict_val = {}
+            dict_mess = {}
             dict_val[arr_row[0]] = row[0]
             dict_val[arr_row[1]] = row[1]
             dict_val[arr_row[2]] = row[2]
@@ -94,8 +97,11 @@ class RequestTODataBase:
             dict_val[arr_row[4]] = row[4]
             dict_val[arr_row[5]] = row[5]
             dict_val[arr_row[6]] = row[6]
+            dict_mess[arr_row[7]] = row[7]
+            val_meesage["Message"] = dict_mess
             dict_out["header"] = dict_val
             array_dict.append(dict_out)
+            array_dict.append(val_meesage)
         dict_message["Message"] = array_dict
         return dict_message
 
