@@ -1,5 +1,4 @@
 from fastapi import FastAPI,Request
-from Models import Message
 from getdata import GetData
 from request_to_database import RequestTODataBase
 app = FastAPI()
@@ -10,15 +9,16 @@ async def root():
 
 
 @app.post('/messages/send')
-async def messages(dictionary: dict):
-    objdata = GetData(dictionary)
+async def messages(dictionary_data: dict):
+    objdata = GetData(dictionary_data)
     val_for_data_base = objdata.get_data()
     objval = RequestTODataBase()
     objval.insert_value(val_for_data_base)
     return {"result": "success"}
 
 @app.get('/messages/receive')
-async def messages_receive():
+async def messages_receive(dictionary_message: dict):
+    print(dictionary_message)
     obj_row = RequestTODataBase()
     list_row = obj_row.request_select()
     return {"Messages": list_row}
