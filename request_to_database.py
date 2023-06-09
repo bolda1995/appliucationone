@@ -84,7 +84,7 @@ class RequestTODataBase:
          'sender-system',
          'data']
         dict_message = {"Message": ""}
-        val_meesage = {"Message":""}
+        val_meesage = {"Message": ""}
         array_dict = []
         for row in list_rows:
             dict_out = {"header": ""}
