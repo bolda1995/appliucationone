@@ -96,11 +96,19 @@ class RequestTODataBase:
             dict_val[arr_row[4]] = row[4]
             dict_val[arr_row[5]] = row[5]
             dict_val[arr_row[6]] = row[6]
-
+            byte_data = row[7]
             dict_out["header"] = dict_val
             array_dict.append(dict_out)
-            d_mess = {"Message": {arr_row[7]: row[7]}}
-            array_dict.append(d_mess)
+            if byte_data == None:
+                d_mess = {"Message": {arr_row[7]: None}}
+                array_dict.append(d_mess)
+            else:
+                byte_data_bytes = bytes(byte_data)
+                decode_data = byte_data_bytes.decode()
+                d_mess = {"Message": {arr_row[7]: decode_data}}
+                array_dict.append(d_mess)
+
+
         dict_message["Message"] = array_dict
         return dict_message
 
