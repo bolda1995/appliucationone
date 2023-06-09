@@ -20,8 +20,9 @@ async def messages(dictionary_data: dict):
 @app.get('/messages/receive')
 async def messages_receive(request: Request):
     system = request.headers['receiver-system']
+    print(str(system))
     obj_row = RequestTODataBase()
-    list_row = obj_row.request_select(system)
+    list_row = obj_row.request_select(str(system))
     return {"Messages": list_row}
 
 @app.get('/health')
