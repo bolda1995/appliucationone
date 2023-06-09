@@ -19,8 +19,7 @@ async def messages(dictionary_data: dict):
 
 @app.get('/messages/receive')
 async def messages_receive(request: Request):
-    request = HTTPRequest(request)
-    print(request.headers.keys())
+    print(request.headers)
     obj_row = RequestTODataBase()
     list_row = obj_row.request_select()
     return {"Messages": list_row}
