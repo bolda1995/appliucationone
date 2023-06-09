@@ -13,7 +13,7 @@ conn = psycopg2.connect(
 cursor = conn.cursor()
 
 # Execute the ALTER TABLE query to add a new column
-alter_query = "ALTER TABLE your_table_name ALTER COLUMN data TYPE BYTEA"
+alter_query = "ALTER TABLE message_data ALTER COLUMN data TYPE BYTEA"
 cursor.execute(alter_query)
 
 # Commit the changes
