@@ -1,6 +1,7 @@
 from fastapi import FastAPI,Request
 from getdata import GetData
 from request_to_database import RequestTODataBase
+from request_parse import *
 app = FastAPI()
 
 @app.get("/")
@@ -18,8 +19,8 @@ async def messages(dictionary_data: dict):
 
 @app.get('/messages/receive')
 async def messages_receive(request: Request):
-    data = request.json()
-    print(data)
+    request = HTTPRequest(request)
+    print(request.headers.keys())
     obj_row = RequestTODataBase()
     list_row = obj_row.request_select()
     return {"Messages": list_row}
