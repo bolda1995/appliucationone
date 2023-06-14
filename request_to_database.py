@@ -49,28 +49,43 @@ class RequestTODataBase:
         conn.close()
         return out_dict
 
-    def set_elements_for_db(self, list_val: list):
+    def set_elements_for_db(list_val: list):
         need_rewrite: bool = True
-
         sending_process_status: bool = True
+        message_type: str = ""
+        processing_type: str = ""
+        receiver_system: str = ""
+        message_id: str = ""
+        sender_system: str = ""
+        data: str = ""
 
-        if list_val[0][1] != 'true':
-            need_rewrite = False
+        for header in list_val:
 
-        if list_val[1][1] != 'true':
-            sending_process_status = False
+            if header[0] == 'need-rewrite':
+                if header[1] != True:
+                    need_rewrite = False
 
-        message_type = list_val[2][1]
+            if header[0] == 'sending-process-status':
+                if header[1] != True:
+                    sending_process_status = False
 
-        processing_type = list_val[3][1]
+            if header[0] == 'message-type':
+                message_type = header[1]
 
-        receiver_system = list_val[4][1]
+            if header[0] == 'processing-type':
+                processing_type = header[1]
 
-        message_id = list_val[5][1]
+            if header[0] == 'receiver-system':
+                receiver_system = header[1]
 
-        sender_system = list_val[6][1]
+            if header[0] == 'message-id':
+                message_id = header[1]
 
-        data = list_val[7][1]
+            if header[0] == 'sender-system':
+                sender_system = header[1]
+
+            if header[0] == 'data':
+                data = header[1]
 
         return need_rewrite, sending_process_status, message_type, processing_type, receiver_system, message_id, sender_system, data
 
