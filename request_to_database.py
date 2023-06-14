@@ -62,11 +62,11 @@ class RequestTODataBase:
         for header in list_val:
 
             if header[0] == 'need-rewrite':
-                if header[1] != True:
+                if header[1] != 'true':
                     need_rewrite = False
 
             if header[0] == 'sending-process-status':
-                if header[1] != True:
+                if header[1] != 'true':
                     sending_process_status = False
 
             if header[0] == 'message-type':
