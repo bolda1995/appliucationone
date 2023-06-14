@@ -43,7 +43,6 @@ class RequestTODataBase:
         list_rows = []
         for row in rows:
             list_rows.append(row)
-        print(list_rows)
         out_dict = self.set_output_elenents(list_rows)
         cursor.close()
         conn.close()
