@@ -49,7 +49,7 @@ class RequestTODataBase:
         conn.close()
         return out_dict
 
-    def set_elements_for_db(list_val: list):
+    def set_elements_for_db(self, list_val:list):
         need_rewrite: bool = True
         sending_process_status: bool = True
         message_type: str = ""
