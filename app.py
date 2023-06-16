@@ -12,8 +12,8 @@ async def root():
 @app.post('/messages/send')
 async def messages(dictionary_data: dict):
     objdata = GetData(dictionary_data)
-    val_for_data_base = objdata.get_data()
-    if type(val_for_data_base) == list:
+    val_for_data_base, bool = objdata.get_data()
+    if bool:
         mess_id = objdata.get_list_data(val_for_data_base)
         objval = RequestTODataBase()
         objval.alter_request_for_database(mess_id)
