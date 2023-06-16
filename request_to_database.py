@@ -17,7 +17,8 @@ class RequestTODataBase:
              receiver_system, 
              message_id,
              sender_system,
-             data 
+             data,
+             received
              )
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
