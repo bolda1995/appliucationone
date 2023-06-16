@@ -13,6 +13,11 @@ async def root():
 async def messages(dictionary_data: dict):
     objdata = GetData(dictionary_data)
     val_for_data_base = objdata.get_data()
+    if type(val_for_data_base) == list:
+        mess_id = objdata.get_list_data(val_for_data_base)
+        objval = RequestTODataBase()
+        objval.alter_request_for_database(mess_id)
+        return {"result": "success"}
     objval = RequestTODataBase()
     objval.insert_value(val_for_data_base)
     return {"result": "success"}

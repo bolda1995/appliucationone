@@ -48,6 +48,45 @@ class RequestTODataBase:
         conn.close()
         return out_dict
 
+    def alter_request_for_database(self, arr_message_id:list):
+        conn = psycopg2.connect(
+            host="127.0.0.1",
+            port="5432",
+            database="onec_cinfo",
+            user="oleg",
+            password="Zxcv7890"
+        )
+
+        # Create a cursor object
+        cur = conn.cursor()
+
+        # Select the records you want to update
+        cur.execute("SELECT * FROM message_data WHERE received=false")
+
+        # Fetch all the selected records
+        records = cur.fetchall()
+
+        value = False
+        for record in records:
+            if record[5] in arr_message_id:
+                value = True
+            else:
+                value = False
+             # Assuming the first column is the ID column
+            record_id = record[5]
+            # Execute the update query
+            cur.execute(
+                "UPDATE message_data SET  received= %s WHERE message_id= %s",
+                (value, record_id)
+            )
+
+        # Commit the changes
+        conn.commit()
+
+        # Close the cursor and connection
+        cur.close()
+        conn.close()
+
     def set_elements_for_db(self, list_val:list):
         need_rewrite: bool = True
         sending_process_status: bool = True
