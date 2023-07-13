@@ -49,7 +49,7 @@ class RequestTODataBase:
         conn.close()
         return out_dict
 
-    def alter_request_for_database(self, arr_message_id:list):
+    def alter_request_for_database(self, arr_message_id: list):
         conn = psycopg2.connect(
             host="127.0.0.1",
             port="5432",
@@ -67,7 +67,7 @@ class RequestTODataBase:
         # Fetch all the selected records
         records = cur.fetchall()
 
-        value = False
+        value: bool = False
         for record in records:
             if record[5] in arr_message_id:
                 value = True
@@ -88,7 +88,7 @@ class RequestTODataBase:
         cur.close()
         conn.close()
 
-    def set_elements_for_db(self, list_val:list):
+    def set_elements_for_db(self, list_val: list):
         need_rewrite: bool = True
         sending_process_status: bool = True
         message_type: str = ""
@@ -170,6 +170,7 @@ class RequestTODataBase:
 
         dict_message["Message"] = array_dict
         return dict_message
+
 
 
 

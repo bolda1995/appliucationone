@@ -1,0 +1,51 @@
+/* Стили для баннера */
+.banner {
+  background-color: #ffffff;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Стили для логотипа */
+
+
+/* Стили для контейнера входа */
+.login-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для заголовка */
+.login-container h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Стили для полей ввода */
+.input-username,
+.input-password {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+
+}
+
+/* Стили для кнопки входа */
+.button-acept {
+  width: 100%;
+  padding: 10px;
+  background-color: #ff6254;
+  color: black;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+
