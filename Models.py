@@ -1,6 +1,5 @@
 class HeadMessage:
 
-
     dictionary_heads: dict = {}
 
     def __init__(self, dictinary_head:dict):

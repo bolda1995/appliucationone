@@ -21,7 +21,9 @@ create_table_query = """
         processing_type VARCHAR(32),
         receiver_system VARCHAR(32),
         message_id VARCHAR(50),
-        sender_system VARCHAR(32)
+        sender_system VARCHAR(32),
+        data BYTEA,
+        received BOOLEAN
     )
 """
 

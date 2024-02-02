@@ -1,175 +1,86 @@
 import psycopg2
-class RequestTODataBase:
+from datetime import datetime
+class RequestToDataBase:
+
+    def create_connection(self):
+        return psycopg2.connect(
+            host="postgres",
+            port="5432",
+            database="onec_cinfo",
+            user="oleg",
+            password="Zxcv7890"
+        )
 
     def insert_value(self, list_val: list):
-        conn = psycopg2.connect(
-            host="127.0.0.1",
-            port="5432",
-            database="onec_cinfo",
-            user="oleg",
-            password="Zxcv7890"
-        )
-        sql_query = """
-            INSERT INTO message_data (sending_process_status,
-             need_rewrite, 
-             message_type, 
-             processing_type, 
-             receiver_system, 
-             message_id,
-             sender_system,
-             data,
-             received
-             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """
-        cursor = conn.cursor()
-        values = self.set_elements_for_db(list_val)
-        cursor.execute(sql_query, values)
-        conn.commit()
-        cursor.close()
-        conn.close()
+        with self.create_connection() as conn, conn.cursor() as cursor:
+            sql_query = """
+                INSERT INTO message_data (
+                    need_rewrite, 
+                    sending_process_status,
+                    message_type, 
+                    processing_type, 
+                    receiver_system, 
+                    message_id,
+                    sender_system,
+                    data,
+                    received
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
+            values = self.set_elements_for_db(list_val)
+            cursor.execute(sql_query, values)
 
     def request_select(self, column):
-        conn = psycopg2.connect(
-            host="127.0.0.1",
-            port="5432",
-            database="onec_cinfo",
-            user="oleg",
-            password="Zxcv7890"
-        )
-        sql_query = f"SELECT * FROM message_data WHERE receiver_system='{str(column)}' AND received=false;"
-        cursor = conn.cursor()
-        cursor.execute(sql_query)
-        rows = cursor.fetchall()
-        list_rows = []
-        for row in rows:
-            list_rows.append(row)
-        out_dict = self.set_output_elenents(list_rows)
-        cursor.close()
-        conn.close()
-        return out_dict
+        with self.create_connection() as conn, conn.cursor() as cursor:
+            # Выборка записей
+            select_query = "SELECT * FROM message_data WHERE receiver_system=%s AND received=false;"
+            cursor.execute(select_query, (column,))
+            rows = cursor.fetchall()
+
+
+            if rows:
+                current_time = datetime.now()
+                update_query = "UPDATE message_data SET send_time = %s WHERE receiver_system=%s AND received=false;"
+                cursor.execute(update_query, (current_time, column))
+
+            return self.set_output_elements(rows)
 
     def alter_request_for_database(self, arr_message_id: list):
-        conn = psycopg2.connect(
-            host="127.0.0.1",
-            port="5432",
-            database="onec_cinfo",
-            user="oleg",
-            password="Zxcv7890"
-        )
+        with self.create_connection() as conn, conn.cursor() as cursor:
+            cursor.execute("SELECT message_id FROM message_data WHERE received=false")
+            records = cursor.fetchall()
 
-        # Create a cursor object
-        cur = conn.cursor()
+            # Получаем текущее время
+            current_time = datetime.now()
 
-        # Select the records you want to update
-        cur.execute("SELECT * FROM message_data WHERE received=false")
-
-        # Fetch all the selected records
-        records = cur.fetchall()
-
-        value: bool = False
-        for record in records:
-            if record[5] in arr_message_id:
-                value = True
-            else:
-                value = False
-             # Assuming the first column is the ID column
-            record_id = record[5]
-            # Execute the update query
-            cur.execute(
-                "UPDATE message_data SET  received= %s WHERE message_id= %s",
-                (value, record_id)
-            )
-
-        # Commit the changes
-        conn.commit()
-
-        # Close the cursor and connection
-        cur.close()
-        conn.close()
+            for record in records:
+                record_id = record[0]  # Получаем message_id из кортежа
+                value = record_id in arr_message_id
+                # Обновляем поле received и arrival_time
+                cursor.execute(
+                    "UPDATE message_data SET received = %s, arrival_time = %s WHERE message_id = %s",
+                    (value, current_time, record_id)
+                )
 
     def set_elements_for_db(self, list_val: list):
-        need_rewrite: bool = True
-        sending_process_status: bool = True
-        message_type: str = ""
-        processing_type: str = ""
-        receiver_system: str = ""
-        message_id: str = ""
-        sender_system: str = ""
-        data: str = ""
-        received : bool = False
+        keys = ['need-rewrite', 'sending-process-status', 'message-type', 'processing-type', 'receiver-system', 'message-id', 'sender-system', 'data', 'received']
+        values = {key: False for key in keys}
+        values['received'] = False  # default value
 
         for header in list_val:
+            key, val = header
+            if key in values:
+                values[key] = val if key != 'data' else val.decode()
 
-            if header[0] == 'need-rewrite':
-                if header[1] != 'true':
-                    need_rewrite = False
+        return tuple(values.values())
 
-            if header[0] == 'sending-process-status':
-                if header[1] != 'true':
-                    sending_process_status = False
-
-            if header[0] == 'message-type':
-                message_type = header[1]
-
-            if header[0] == 'processing-type':
-                processing_type = header[1]
-
-            if header[0] == 'receiver-system':
-                receiver_system = header[1]
-
-            if header[0] == 'message-id':
-                message_id = header[1]
-
-            if header[0] == 'sender-system':
-                sender_system = header[1]
-
-            if header[0] == 'data':
-                data = header[1]
-
-            if header[0] == 'received':
-                received = False
-
-
-        return need_rewrite, sending_process_status, message_type, processing_type, receiver_system, message_id, sender_system, data, received
-
-    def set_output_elenents(self, list_rows: list):
-        arr_row = ['need-rewrite',
-         'sending-process-status',
-         'message-type',
-         'processing-type',
-         'receiver-system',
-         'message-id',
-         'sender-system',
-         'data']
-        dict_message = {"Message": ""}
-
-        array_dict = []
+    def set_output_elements(self, list_rows: list):
+        headers = ['need-rewrite', 'sending-process-status', 'message-type', 'processing-type', 'receiver-system', 'message-id', 'sender-system', 'data']
+        result = []
         for row in list_rows:
-            dict_out = {"header": ""}
-            dict_val = {}
-            dict_val[arr_row[0]] = row[0]
-            dict_val[arr_row[1]] = row[1]
-            dict_val[arr_row[2]] = row[2]
-            dict_val[arr_row[3]] = row[3]
-            dict_val[arr_row[4]] = row[4]
-            dict_val[arr_row[5]] = row[5]
-            dict_val[arr_row[6]] = row[6]
-            byte_data = row[7]
-            dict_out["header"] = dict_val
-            array_dict.append(dict_out)
-            if byte_data == None:
-                d_mess = {"Message": {arr_row[7]: None}}
-                array_dict.append(d_mess)
-            else:
-                byte_data_bytes = bytes(byte_data)
-                decode_data = byte_data_bytes.decode()
-                d_mess = {"Message": {arr_row[7]: decode_data}}
-                array_dict.append(d_mess)
-
-
-        dict_message["Message"] = array_dict
-        return dict_message
+            row_dict = {header: row[idx] for idx, header in enumerate(headers)}
+            result.append(row_dict)
+        return result
 
 
 
