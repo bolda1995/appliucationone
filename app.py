@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 from fastapi import HTTPException
 import traceback
 from metrics import update_uptime
+from prometheus_fastapi_instrumentator import Instrumentator
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -53,6 +54,7 @@ async def messages_send(dictionary_data: dict):
     logging.info("Post endpoint called and returned 200.")
     return {"result": "success"}
 
+Instrumentator().instrument(app).expose(app)
 
 @app.get('/messages/receive')
 async def messages_receive(request: Request):
