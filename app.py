@@ -7,6 +7,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from adminfunction.adminmodel import LoginRequest
 from fastapi.responses import JSONResponse
+from fastapi import HTTPException
+import traceback
+from metrics import update_uptime
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -34,46 +37,39 @@ async def admin(request: Request):
 
 @app.post('/messages/send')
 async def messages_send(dictionary_data: dict):
-    try:
-        logging.info("Post endpoint was called.")
-        objdata = GetData(dictionary_data)
-        val_for_data_base, boolelement = objdata.get_data()
 
-        objval = RequestToDataBase()
+    logging.info("Post endpoint was called.")
+    objdata = GetData(dictionary_data)
+    val_for_data_base, boolelement = objdata.get_data()
 
-        if boolelement:
-            mess_id = objdata.get_list_data(val_for_data_base)
-            objval.alter_request_for_database(mess_id)
-        else:
-            objval.insert_value(val_for_data_base)
+    objval = RequestToDataBase()
 
-        logging.info("Post endpoint called and returned 200.")
-        return {"result": "success"}
-    except Exception as e:
-        logging.error(f"Error in POST /messages/send: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
+    if boolelement:
+        mess_id = objdata.get_list_data(val_for_data_base)
+        objval.alter_request_for_database(mess_id)
+    else:
+        objval.insert_value(val_for_data_base)
+
+    logging.info("Post endpoint called and returned 200.")
+    return {"result": "success"}
+
 
 @app.get('/messages/receive')
 async def messages_receive(request: Request):
-    try:
-        logging.info("GET endpoint was called.")
+    system = request.query_params.get('receiver-system')
+    if not system:
+        raise HTTPException(status_code=400, detail="Receiver system not specified in query parameters")
 
-        system = request.headers.get('receiver-system')
-        if not system:
-            raise HTTPException(status_code=400, detail="Receiver system not specified in headers")
+    obj_row = RequestToDataBase()
+    list_row = obj_row.request_select(str(system))
+    print(list_row)
+    logging.info("GET endpoint was called and returned 200.")
+    return {"Messages": list_row}
 
-        obj_row = RequestToDataBase()
-        list_row = obj_row.request_select(str(system))
 
-        logging.info("GET endpoint was called and returned 200.")
-        return {"Messages": list_row}
-    except HTTPException as e:
-        logging.error(f"Error in GET /messages/receive: {str(e.detail)}")
-        raise
-    except Exception as e:
-        logging.error(f"Error in GET /messages/receive: {str(e)}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
-
+@app.get("/metrics")
+def metrics():
+    update_uptime()
 
 @app.get('/health')
 async def check_health():
