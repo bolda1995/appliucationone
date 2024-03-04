@@ -58,7 +58,7 @@ Instrumentator().instrument(app).expose(app)
 
 @app.get('/messages/receive')
 async def messages_receive(request: Request):
-    system = request.query_params.get('receiver-system')
+    system = request.headers.get('receiver-system')
     if not system:
         raise HTTPException(status_code=400, detail="Receiver system not specified in query parameters")
 

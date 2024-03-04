@@ -2,7 +2,8 @@ from getdata import GetData
 import unittest
 from unittest.mock import patch
 import psycopg2
-from request_to_database import RequestTODataBase
+
+from request_to_database import *
 class MyTestCase(unittest.TestCase):
 
 
@@ -154,6 +155,7 @@ class MyTestCase(unittest.TestCase):
             ]
         }
         self.assertEqual(result, expected_result)
+
 
 
 if __name__ == '__main__':

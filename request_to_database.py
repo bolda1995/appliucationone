@@ -1,6 +1,8 @@
 import psycopg2
 import base64
 from datetime import datetime
+
+
 class RequestToDataBase:
 
     def create_connection(self):
@@ -24,9 +26,12 @@ class RequestToDataBase:
                     message_id,
                     sender_system,
                     data,
-                    received
+                    received,
+                    date_time,
+                    arrival_time,
+                    send_time
                 )
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
             values = self.set_elements_for_db(list_val)
             cursor.execute(sql_query, values)
@@ -37,7 +42,6 @@ class RequestToDataBase:
             select_query = "SELECT * FROM message_data WHERE receiver_system=%s AND received=false;"
             cursor.execute(select_query, (column,))
             rows = cursor.fetchall()
-
 
             if rows:
                 current_time = datetime.now()
@@ -65,10 +69,10 @@ class RequestToDataBase:
 
     def set_elements_for_db(self, list_val: list):
         keys = ['need-rewrite', 'sending-process-status', 'message-type', 'processing-type', 'receiver-system',
-                'message-id', 'sender-system', 'data', 'received']
+                'message-id', 'sender-system', 'data', 'received', "date_time", "arrival_time", "send_time"]
         values = {key: False for key in keys}
         values['received'] = False  # default value
-
+        print(list_val)
         for header in list_val:
             key, val = header
             if key in values:
@@ -81,37 +85,29 @@ class RequestToDataBase:
 
     def set_output_elements(self, list_rows: list):
         headers = ['need-rewrite', 'sending-process-status', 'message-type', 'processing-type', 'receiver-system',
-                   'message-id', 'sender-system', 'data']
+                   'message-id', 'sender-system', 'data', 'date-time']
         result = []
 
         for row in list_rows:
-            # Создаем часть header
-            header_part = {headers[i]: row[i] for i in range(len(headers)) if headers[i] != 'data'}
+            print(row[11])
+            header_part = {}
+            for i, header in enumerate(headers):
+                if header == 'data':
+                    # Пропускаем обработку 'data' здесь, так как это бинарные данные
+                    continue
+                elif header == 'date_time':
+                    header_part[header] = row[11].strftime('%Y-%m-%d %H:%M:%S') if isinstance(row[11], datetime) else None
 
-            # Обрабатываем часть данных, если она есть
-            data_index = headers.index('data')  # Получаем индекс для 'data'
-            data_part = row[data_index] if row[data_index] else None
+                else:
+                    # Для всех остальных полей просто копируем значение
+                    header_part[header] = row[i]
 
-            if isinstance(data_part, memoryview):
-                # Если это memoryview, сначала преобразуем в bytes
-                data_part = data_part.tobytes()
+            # Добавляем обработку для 'data'
+            data_index = headers.index('data')
+            data_part = base64.b64encode(row[data_index]).decode('utf-8') if row[data_index] else None
 
-            if isinstance(data_part, bytes):
-                # Конвертируем bytes в base64 encoded string
-                data_part = base64.b64encode(data_part).decode('utf-8')
-
-            # Добавляем header
-            message_structure = [{"header": header_part}]
-
-            # Добавляем данные, если они есть
-            if data_part is not None:
-                message_structure.append({"Message": {"data": data_part}})
-
-            result.extend(message_structure)  # Добавляем структуру сообщения в итоговый результат
-
+            # Формируем и добавляем структуру сообщения в итоговый результат
+            result.append({"header": header_part})
+            if data_part:
+                result.append({"Message": {"data": data_part}})
         return result
-
-
-
-
-
